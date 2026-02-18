@@ -48,5 +48,3 @@
     setIsModalOpen(false);
     setEditingTask(null);
   };
-
-// ... (o resto do código do layout que te mandei antes continua igual)
