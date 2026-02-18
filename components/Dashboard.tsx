@@ -7,10 +7,11 @@ import TaskCard from './TaskCard';
 interface DashboardProps {
   tasks: Task[];
   onEditTask: (task: Task) => void;
+  onDeleteTask: (id: string) => void;
   lang: Language;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, lang }) => {
+const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, onDeleteTask, lang }) => {
   const [hoveredTask, setHoveredTask] = useState<{ task: Task; rect: DOMRect } | null>(null);
   const categories = [Category.PROJETOS, Category.QUALIDADE, Category.PRODUTO, Category.FINANCEIRO];
   const t = translations[lang];
@@ -56,6 +57,7 @@ const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, lang }) => {
                   key={task.id} 
                   task={task} 
                   onEdit={onEditTask} 
+                  onDelete={onDeleteTask}
                   lang={lang} 
                   onHover={handleTaskHover}
                 />
@@ -72,7 +74,6 @@ const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, lang }) => {
         );
       })}
 
-      {/* Floating Detail Panel - Now in Sublte Lavender-Tinted Off-White */}
       {hoveredTask && (
         <div 
           className="fixed z-[100] w-80 bg-white/95 backdrop-blur-3xl border border-indigo-100 shadow-[0_25px_60px_rgba(79,70,229,0.12)] rounded-[2rem] p-7 pointer-events-none animate-in fade-in zoom-in-95 slide-in-from-top-4 duration-300 overflow-hidden"
@@ -81,7 +82,6 @@ const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, lang }) => {
             left: `${hoveredTask.rect.right + 25 > window.innerWidth - 320 ? hoveredTask.rect.left - 335 : hoveredTask.rect.right + 25}px`
           }}
         >
-          {/* Subtle Accent Background Element */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/30 rounded-full -mr-16 -mt-16 blur-3xl"></div>
           
           <div className="relative">
