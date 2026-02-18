@@ -5,16 +5,13 @@ import Dashboard from './components/Dashboard.tsx';
 import Database from './components/Database.tsx';
 import TaskModal from './components/TaskModal.tsx';
 
-// CONFIGURAÇÃO DA API
+// SUA API DO SHEETDB
 const API_URL = "https://sheetdb.io/api/v1/qfvxr8lu43heq";
 
 const App: React.FC = () => {
-  // --- Estados de Segurança ---
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState(false);
-
-  // --- Estados da Aplicação ---
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activeTab, setActiveTab] = useState<'KANBAN' | 'DATABASE'>('KANBAN');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +20,7 @@ const App: React.FC = () => {
 
   const t = translations[lang];
 
-  // --- BUSCAR DADOS (RESOLVE O F5) ---
+  // --- BUSCAR DADOS (LÊ EXATAMENTE O QUE ESTÁ NA PLANILHA) ---
   useEffect(() => {
     if (isAuthenticated) {
       fetch(API_URL)
@@ -33,9 +30,10 @@ const App: React.FC = () => {
             ...item,
             id: String(item.id),
             progress: Number(item.progress) || 0,
-            // Traduzindo colunas da planilha para o site
-            actionSteps: item.actionsteps || '',
-            scenarioSummary: item.scenariosummary || '',
+            // Aqui o código lê as colunas exatamente como você nomeou
+            description: item.description || '',
+            actionSteps: item.actionSteps || '',
+            scenarioSummary: item.scenarioSummary || '',
             timeline: item.timeline || ''
           }));
           setTasks(formatData);
@@ -48,7 +46,7 @@ const App: React.FC = () => {
     region: 'Todos', priority: 'Todos', owner: 'Todos', delayed: 'Todos', status: 'Todos'
   });
 
-  // --- LÓGICA DE LOGIN ---
+  // --- LÓGICA DE LOGIN (VISUAL PREMIUM) ---
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (passwordInput === 'Stellantis2026!') {
@@ -64,7 +62,6 @@ const App: React.FC = () => {
   const filteredTasks = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     return tasks.filter(task => {
       let isLate = false;
       if (task.dueDate && task.status !== Status.CONCLUIDO) {
@@ -74,27 +71,20 @@ const App: React.FC = () => {
           isLate = taskDate < today;
         }
       }
-
       const matchRegion = filters.region === 'Todos' || task.region === filters.region;
       const matchPriority = filters.priority === 'Todos' || task.priority === filters.priority;
       const matchOwner = filters.owner === 'Todos' || task.owner === filters.owner || task.support === filters.owner;
-      
       let matchStatus = filters.status === 'Todos' ? true : filters.status === 'Ativos' ? (task.status === Status.EM_ANDAMENTO || task.status === Status.NAO_INICIADO) : task.status === filters.status;
       const matchDelayed = filters.delayed === 'Todos' || (filters.delayed === false && isLate) || (filters.delayed === true && !isLate);
-      
       return matchRegion && matchPriority && matchOwner && matchStatus && matchDelayed;
     });
   }, [tasks, filters]);
 
-  // --- SALVAR TUDO NA PLANILHA ---
+  // --- SALVAR (ENVIA OS NOMES IGUAIS AOS DA PLANILHA) ---
   const handleSaveTask = async (taskData: Task) => {
-    const payload = {
-      ...taskData,
-      id: taskData.id || Math.random().toString(36).substr(2, 9),
-      actionsteps: taskData.actionSteps || '',
-      scenariosummary: taskData.scenarioSummary || '',
-      timeline: taskData.timeline || ''
-    };
+    // Agora o "id" é gerado ou mantido, e os campos seguem sua planilha
+    const payload = { ...taskData };
+    if (!payload.id) payload.id = Math.random().toString(36).substr(2, 9);
 
     if (editingTask) {
       await fetch(`${API_URL}/id/${editingTask.id}`, {
@@ -102,14 +92,14 @@ const App: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: payload })
       });
-      setTasks(prev => prev.map(t => t.id === editingTask.id ? taskData : t));
+      setTasks(prev => prev.map(t => t.id === editingTask.id ? payload : t));
     } else {
       await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: [payload] })
       });
-      setTasks(prev => [...prev, taskData]);
+      setTasks(prev => [...prev, payload]);
     }
     setIsModalOpen(false);
     setEditingTask(null);
@@ -118,9 +108,10 @@ const App: React.FC = () => {
   const handleDeleteTask = async (id: string) => {
     await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
     setTasks(prev => prev.filter(task => task.id !== id));
+    if (isModalOpen) setIsModalOpen(false);
   };
 
-  // --- TELA DE LOGIN (IDENTIDADE VISUAL RESTAURADA) ---
+  // --- INTERFACE DE LOGIN ---
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-indigo-950 px-4">
@@ -142,11 +133,9 @@ const App: React.FC = () => {
                 className={`w-full rounded-2xl border ${loginError ? 'border-red-500 bg-red-500/10' : 'border-white/10 bg-white/5'} p-4 text-center text-white outline-none focus:border-indigo-500`}
                 autoFocus
               />
-              {loginError && <p className="text-center text-[10px] font-black uppercase text-red-400 animate-bounce">Senha Incorreta</p>}
-              <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black uppercase text-white hover:bg-indigo-500 text-xs">Entrar</button>
+              <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black uppercase text-white hover:bg-indigo-500 text-xs transition-all">Entrar</button>
             </form>
           </div>
-          <p className="mt-8 text-center text-[9px] font-bold uppercase tracking-widest text-white/20">Internal Use Only • Stellantis LatAm</p>
         </div>
       </div>
     );
@@ -160,20 +149,19 @@ const App: React.FC = () => {
           <div className="flex items-center gap-6">
             <div className="bg-indigo-900 text-white p-3 rounded-2xl flex items-center gap-3">
               <i className="fas fa-chart-line text-2xl"></i>
-              <h1 className="text-lg font-black">CONVERGÊNCIA</h1>
+              <h1 className="text-lg font-black tracking-tight leading-none">CONVERGÊNCIA</h1>
             </div>
-            <nav className="flex gap-1 bg-gray-50 p-1.5 rounded-2xl">
-              <button onClick={() => setActiveTab('KANBAN')} className={`px-8 py-2 rounded-xl text-xs font-black ${activeTab === 'KANBAN' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-400'}`}>{t.kanban}</button>
-              <button onClick={() => setActiveTab('DATABASE')} className={`px-8 py-2 rounded-xl text-xs font-black ${activeTab === 'DATABASE' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-400'}`}>{t.database}</button>
+            <nav className="flex gap-1 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
+              <button onClick={() => setActiveTab('KANBAN')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'KANBAN' ? 'bg-white text-indigo-700 shadow-sm border border-gray-100' : 'text-gray-400'}`}>{t.kanban}</button>
+              <button onClick={() => setActiveTab('DATABASE')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'DATABASE' ? 'bg-white text-indigo-700 shadow-sm border border-gray-100' : 'text-gray-400'}`}>{t.database}</button>
             </nav>
           </div>
           <div className="flex items-center gap-6">
-            <button onClick={() => setLang('PT')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${lang === 'PT' ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>PT</button>
-            <button onClick={() => setLang('ES')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${lang === 'ES' ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>ES</button>
             <button onClick={() => setIsAuthenticated(false)} className="text-red-600 font-black text-[10px] bg-red-50 px-4 py-2 rounded-xl border border-red-100">SAIR</button>
           </div>
         </div>
       </header>
+
       <main className="flex-1 max-w-[1600px] mx-auto w-full pt-4 pb-12">
         {activeTab === 'KANBAN' ? (
           <Dashboard tasks={filteredTasks} onEditTask={(t) => {setEditingTask(t); setIsModalOpen(true);}} onDeleteTask={handleDeleteTask} lang={lang} />
@@ -181,7 +169,15 @@ const App: React.FC = () => {
           <Database tasks={filteredTasks} onEditTask={(t) => {setEditingTask(t); setIsModalOpen(true);}} onDeleteTask={handleDeleteTask} onAddTask={() => {setEditingTask(null); setIsModalOpen(true);}} lang={lang} />
         )}
       </main>
-      <TaskModal isOpen={isModalOpen || !!editingTask} task={editingTask} onClose={() => {setIsModalOpen(false); setEditingTask(null);}} onSave={handleSaveTask} onDelete={handleDeleteTask} lang={lang} />
+
+      <TaskModal 
+        isOpen={isModalOpen || !!editingTask} 
+        task={editingTask} 
+        onClose={() => {setIsModalOpen(false); setEditingTask(null);}} 
+        onSave={handleSaveTask} 
+        onDelete={handleDeleteTask} 
+        lang={lang} 
+      />
     </div>
   );
 };
