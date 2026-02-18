@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
   const t = translations[lang];
 
-  // BUSCAR DADOS
+  // BUSCAR DADOS (CARREGA TUDO DA PLANILHA)
   useEffect(() => {
     if (isAuthenticated) {
       fetch(API_URL)
@@ -47,7 +47,6 @@ const App: React.FC = () => {
   const filteredTasks = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     return tasks.filter(task => {
       let isLate = false;
       if (task.dueDate && task.status !== Status.CONCLUIDO) {
@@ -57,18 +56,11 @@ const App: React.FC = () => {
           isLate = taskDate < today;
         }
       }
-
       const matchRegion = filters.region === 'Todos' || task.region === filters.region;
       const matchPriority = filters.priority === 'Todos' || task.priority === filters.priority;
       const matchOwner = filters.owner === 'Todos' || task.owner === filters.owner || task.support === filters.owner;
-      
-      let matchStatus = false;
-      if (filters.status === 'Todos') { matchStatus = true; } 
-      else if (filters.status === 'Ativos') { matchStatus = task.status === Status.EM_ANDAMENTO || task.status === Status.NAO_INICIADO; } 
-      else { matchStatus = task.status === filters.status; }
-
+      let matchStatus = filters.status === 'Todos' ? true : filters.status === 'Ativos' ? (task.status === Status.EM_ANDAMENTO || task.status === Status.NAO_INICIADO) : task.status === filters.status;
       const matchDelayed = filters.delayed === 'Todos' || (filters.delayed === false && isLate) || (filters.delayed === true && !isLate);
-      
       return matchRegion && matchPriority && matchOwner && matchStatus && matchDelayed;
     });
   }, [tasks, filters]);
@@ -98,18 +90,29 @@ const App: React.FC = () => {
     setTasks(prev => prev.filter(task => task.id !== id));
   };
 
+  // --- FUNÇÃO DE SALVAR BLINDADA ---
   const handleSaveTask = async (taskData: Task) => {
-    // ESTA PARTE GARANTE QUE TODOS OS CAMPOS SEJAM ENVIADOS CORRETAMENTE
+    // Aqui nós garantimos que TODOS os campos sejam enviados com nomes minúsculos
     const payload = {
-      ...taskData,
       id: taskData.id || Math.random().toString(36).substr(2, 9),
+      region: taskData.region,
+      title: taskData.title,
       description: taskData.description || '',
+      category: taskData.category,
+      priority: taskData.priority,
+      owner: taskData.owner,
+      support: taskData.support,
+      startDate: taskData.startDate,
+      dueDate: taskData.dueDate,
+      status: taskData.status,
+      progress: taskData.progress,
       actionSteps: taskData.actionSteps || '',
       scenarioSummary: taskData.scenarioSummary || '',
       timeline: taskData.timeline || ''
     };
 
     if (editingTask) {
+      // ATUALIZAR EXISTENTE
       await fetch(`${API_URL}/id/${editingTask.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -117,6 +120,7 @@ const App: React.FC = () => {
       });
       setTasks(prev => prev.map(t => t.id === editingTask.id ? payload : t));
     } else {
+      // CRIAR NOVO
       await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -141,14 +145,7 @@ const App: React.FC = () => {
           </div>
           <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 backdrop-blur-xl">
             <form onSubmit={handleLogin} className="space-y-6">
-              <input
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="Senha de Acesso"
-                className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-center text-white outline-none"
-                autoFocus
-              />
+              <input type="password" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} placeholder="Senha de Acesso" className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-center text-white outline-none" autoFocus />
               <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black text-white uppercase text-xs">Acessar Hub</button>
             </form>
           </div>
@@ -179,7 +176,6 @@ const App: React.FC = () => {
           </div>
         </div>
       </header>
-
       <main className="flex-1 max-w-[1600px] mx-auto w-full pt-4">
         {activeTab === 'KANBAN' ? (
           <Dashboard tasks={filteredTasks} onEditTask={(t) => {setEditingTask(t); setIsModalOpen(true);}} onDeleteTask={handleDeleteTask} lang={lang} />
@@ -187,15 +183,7 @@ const App: React.FC = () => {
           <Database tasks={filteredTasks} onEditTask={(t) => {setEditingTask(t); setIsModalOpen(true);}} onDeleteTask={handleDeleteTask} onAddTask={() => {setEditingTask(null); setIsModalOpen(true);}} lang={lang} />
         )}
       </main>
-
-      <TaskModal 
-        isOpen={isModalOpen} 
-        task={editingTask} 
-        onClose={() => {setIsModalOpen(false); setEditingTask(null);}} 
-        onSave={handleSaveTask} 
-        onDelete={handleDeleteTask} 
-        lang={lang} 
-      />
+      <TaskModal isOpen={isModalOpen} task={editingTask} onClose={() => {setIsModalOpen(false); setEditingTask(null);}} onSave={handleSaveTask} onDelete={handleDeleteTask} lang={lang} />
     </div>
   );
 };
