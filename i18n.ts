@@ -1,6 +1,11 @@
 
 export const translations = {
   PT: {
+    loginTitle: "Acesso Restrito",
+    loginSubtitle: "Digite a senha para acessar o Customer Care Hub",
+    loginPlaceholder: "Sua senha",
+    loginButton: "ENTRAR NO SISTEMA",
+    loginError: "Senha incorreta. Tente novamente.",
     kanban: "KANBAN",
     database: "BASE DE DADOS",
     region: "Região",
@@ -51,6 +56,11 @@ export const translations = {
     noTasks: "Nenhuma tarefa registrada no banco de dados."
   },
   ES: {
+    loginTitle: "Acceso Restringido",
+    loginSubtitle: "Ingrese la contraseña para acceder al Customer Care Hub",
+    loginPlaceholder: "Su contraseña",
+    loginButton: "ENTRAR AL SISTEMA",
+    loginError: "Contraseña incorrecta. Inténtelo de nuevo.",
     kanban: "TABLERO",
     database: "BASE DE DATOS",
     region: "Región",
@@ -73,7 +83,7 @@ export const translations = {
     environment: "Entorno de Control Customer Care",
     category: "Área (Categoría)",
     description: "Descripción Detallada",
-    actionSteps: "Acción / Próximos Pasos",
+    actionSteps: "Acción / Próximos Passos",
     scenarioSummary: "Resumen del Escenario",
     taskTimeline: "Cronología de la Tarea",
     escalation: "Escalación (Badges)",
