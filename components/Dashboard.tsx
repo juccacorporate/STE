@@ -1,9 +1,7 @@
 import React from 'react';
 import { Task, Language } from '../types';
 import { translations } from '../i18n';
-import KanbanColumn from './KanbanColumn'; // <-- O caminho deve ser relativo, assim
-// O caminho exato depende da estrutura da sua pasta 'components'. 
-// Se KanbanColumn.tsx está ao lado de Dashboard.tsx, "./KanbanColumn" é o correto.
+import KanbanColumn from './KanbanColumn'; // <-- Importação ajustada para corresponder ao nome do arquivo
 
 interface Props {
   tasks: Task[];
@@ -15,7 +13,7 @@ interface Props {
 const Dashboard: React.FC<Props> = ({ tasks, onEditTask, onDeleteTask, lang }) => {
   const t = translations[lang];
 
-  // Filtra as tarefas por status para cada coluna do Kanban
+  // Filtra as tarefas por categoria (essas categorias devem bater com as colunas da planilha)
   const projects = tasks.filter(task => task.category === 'PROJETOS');
   const quality = tasks.filter(task => task.category === 'QUALIDADE');
   const product = tasks.filter(task => task.category === 'PRODUTO');
