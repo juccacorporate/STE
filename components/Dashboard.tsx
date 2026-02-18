@@ -1,7 +1,7 @@
 import React from 'react';
 import { Task, Language } from '../types';
 import { translations } from '../i18n';
-import KanbanColumn from './KanbanColumn'; // <-- Importação ajustada para corresponder ao nome do arquivo
+import KanbanColumn from './kanbancolumn'; // <--- CORRIGIDO PARA MINÚSCULAS AQUI
 
 interface Props {
   tasks: Task[];
