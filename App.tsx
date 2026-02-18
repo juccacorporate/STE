@@ -7,6 +7,11 @@ import Dashboard from './components/Dashboard';
 import Database from './components/Database';
 import TaskModal from './components/TaskModal';
 
+// Extend FilterState to support the special 'Ativos' status in the UI
+type AppFilterState = Omit<FilterState, 'status'> & {
+  status: Status | 'Todos' | 'Ativos';
+};
+
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [activeTab, setActiveTab] = useState<'KANBAN' | 'DATABASE'>('KANBAN');
@@ -16,7 +21,7 @@ const App: React.FC = () => {
 
   const t = translations[lang];
 
-  const [filters, setFilters] = useState<FilterState & { status: Status | 'Todos' | 'Ativos' }>({
+  const [filters, setFilters] = useState<AppFilterState>({
     region: 'Todos',
     priority: 'Todos',
     owner: 'Todos',
