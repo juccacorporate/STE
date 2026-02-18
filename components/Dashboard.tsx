@@ -1,7 +1,9 @@
 import React from 'react';
-import { Task, Language, Status } from '../types';
+import { Task, Language } from '../types';
 import { translations } from '../i18n';
-import KanbanColumn from './KanbanColumn'; // <-- Caminho corrigido aqui
+import KanbanColumn from './KanbanColumn'; // <-- O caminho deve ser relativo, assim
+// O caminho exato depende da estrutura da sua pasta 'components'. 
+// Se KanbanColumn.tsx está ao lado de Dashboard.tsx, "./KanbanColumn" é o correto.
 
 interface Props {
   tasks: Task[];
