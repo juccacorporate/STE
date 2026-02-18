@@ -1,19 +1,17 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Task, Language, Region, Status } from '../types';
 import { translations } from '../i18n';
 
 interface DatabaseProps {
   tasks: Task[];
   onEditTask: (task: Task) => void;
-  onDeleteTask: (id: string) => void;
   onAddTask: () => void;
   lang: Language;
 }
 
-const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, onAddTask, lang }) => {
+const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onAddTask, lang }) => {
   const t = translations[lang];
-  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const getRegionRowColor = (region: Region) => {
     switch (region) {
@@ -123,35 +121,12 @@ const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, on
                   </div>
                 </td>
                 <td className="p-4 text-right">
-                  <div className="flex gap-2 justify-end">
-                    <button 
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEditTask(task); }}
-                      className="text-indigo-600 hover:text-indigo-900 font-black uppercase tracking-widest text-[9px] bg-white border border-gray-200 hover:border-indigo-400 px-3 py-2 rounded-lg transition-all shadow-sm flex items-center gap-1.5"
-                    >
-                      <i className="fas fa-edit"></i> {t.edit}
-                    </button>
-                    <button 
-                      onClick={(e) => { 
-                        e.preventDefault(); 
-                        e.stopPropagation(); 
-                        if (confirmingId === task.id) {
-                          onDeleteTask(task.id);
-                          setConfirmingId(null);
-                        } else {
-                          setConfirmingId(task.id);
-                        }
-                      }}
-                      onMouseLeave={() => setConfirmingId(null)}
-                      className={`font-black uppercase tracking-widest text-[9px] px-3 py-2 rounded-lg transition-all shadow-sm flex items-center gap-1.5 border min-w-[100px] justify-center
-                        ${confirmingId === task.id 
-                          ? 'bg-red-600 border-red-700 text-white animate-pulse' 
-                          : 'bg-white border-red-100 text-red-500 hover:bg-red-50 hover:text-red-700'}`}
-                    >
-                      {confirmingId === task.id ? (lang === 'PT' ? 'CONFIRMAR?' : '¿CONFIRMAR?') : (
-                        <><i className="fas fa-trash-alt"></i> {t.delete}</>
-                      )}
-                    </button>
-                  </div>
+                  <button 
+                    onClick={() => onEditTask(task)}
+                    className="text-indigo-600 hover:text-indigo-900 font-black uppercase tracking-widest text-[9px] bg-white border border-gray-200 hover:border-indigo-400 px-4 py-2 rounded-lg transition-all shadow-sm"
+                  >
+                    {t.edit}
+                  </button>
                 </td>
               </tr>
             );
