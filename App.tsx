@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
   const t = translations[lang];
 
-  // BUSCAR DADOS DA PLANILHA
+  // BUSCAR TODOS OS DADOS (INCLUINDO OS NOVOS CAMPOS)
   useEffect(() => {
     if (isAuthenticated) {
       fetch(API_URL)
@@ -28,7 +28,11 @@ const App: React.FC = () => {
           const formatData = data.map((item: any) => ({
             ...item,
             id: String(item.id),
-            progress: Number(item.progress) || 0
+            progress: Number(item.progress) || 0,
+            // Garante que campos vazios não quebrem o site
+            actionSteps: item.actionSteps || '',
+            scenarioSummary: item.scenarioSummary || '',
+            timeline: item.timeline || ''
           }));
           setTasks(formatData);
         })
@@ -106,6 +110,7 @@ const App: React.FC = () => {
     if (isModalOpen) setIsModalOpen(false);
   };
 
+  // SALVAR TUDO (INCLUINDO OS NOVOS CAMPOS)
   const handleSaveTask = async (taskData: Task) => {
     if (editingTask) {
       await fetch(`${API_URL}/id/${editingTask.id}`, {
@@ -127,7 +132,6 @@ const App: React.FC = () => {
     setEditingTask(null);
   };
 
-  // --- TELA DE LOGIN RESTAURADA ---
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-indigo-950 px-4">
@@ -139,13 +143,10 @@ const App: React.FC = () => {
             <h1 className="text-3xl font-black tracking-tighter text-white">CONVERGÊNCIA</h1>
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-indigo-400 opacity-60">Customer Care Secure Hub</p>
           </div>
-
           <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 backdrop-blur-xl shadow-2xl">
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
-                <label className="mb-2 block px-2 text-[10px] font-black uppercase tracking-widest text-indigo-300">
-                  Senha de Acesso
-                </label>
+                <label className="mb-2 block px-2 text-[10px] font-black uppercase tracking-widest text-indigo-300">Senha de Acesso</label>
                 <input
                   type="password"
                   value={passwordInput}
@@ -155,31 +156,16 @@ const App: React.FC = () => {
                   autoFocus
                 />
               </div>
-
-              {loginError && (
-                <p className="text-center text-[10px] font-black uppercase tracking-widest text-red-400 animate-bounce">
-                  Senha Incorreta
-                </p>
-              )}
-
-              <button
-                type="submit"
-                className="w-full rounded-2xl bg-indigo-600 py-4 font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-indigo-500 text-xs"
-              >
-                Acessar Hub
-              </button>
+              {loginError && <p className="text-center text-[10px] font-black uppercase text-red-400 animate-bounce">Senha Incorreta</p>}
+              <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black text-white hover:bg-indigo-500 transition-all text-xs">Acessar Hub</button>
             </form>
           </div>
-
-          <p className="mt-8 text-center text-[9px] font-bold uppercase tracking-widest text-white/20">
-            Internal Use Only • Stellantis LatAm
-          </p>
+          <p className="mt-8 text-center text-[9px] font-bold uppercase tracking-widest text-white/20">Internal Use Only • Stellantis LatAm</p>
         </div>
       </div>
     );
   }
 
-  // --- CONTEÚDO PRINCIPAL ---
   return (
     <div className="flex flex-col min-h-screen bg-[#FDFDFF]">
       <header className="bg-white border-b border-gray-100 p-4 sticky top-0 z-30 shadow-sm">
@@ -192,13 +178,11 @@ const App: React.FC = () => {
                 <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-indigo-300 opacity-80">Customer Care Hub</p>
               </div>
             </div>
-            
             <nav className="flex gap-1 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
-              <button onClick={() => setActiveTab('KANBAN')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'KANBAN' ? 'bg-white text-indigo-700 shadow-sm border border-gray-100' : 'text-gray-400'}`}>{t.kanban}</button>
-              <button onClick={() => setActiveTab('DATABASE')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'DATABASE' ? 'bg-white text-indigo-700 shadow-sm border border-gray-100' : 'text-gray-400'}`}>{t.database}</button>
+              <button onClick={() => setActiveTab('KANBAN')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'KANBAN' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-400'}`}>{t.kanban}</button>
+              <button onClick={() => setActiveTab('DATABASE')} className={`px-8 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'DATABASE' ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-400'}`}>{t.database}</button>
             </nav>
           </div>
-
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl">
                <button onClick={() => setLang('PT')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black ${lang === 'PT' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-400'}`}>PT</button>
@@ -207,8 +191,6 @@ const App: React.FC = () => {
             <button onClick={() => setIsAuthenticated(false)} className="text-red-600 font-black text-[10px] bg-red-50 px-4 py-2 rounded-xl border border-red-100">SAIR</button>
           </div>
         </div>
-
-        {/* Filtros */}
         <div className="max-w-[1600px] mx-auto mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
           <select value={filters.region} onChange={(e) => setFilters(f => ({ ...f, region: e.target.value as any }))} className="text-[11px] border border-gray-200 rounded-xl p-2.5 bg-white font-bold">
             <option value="Todos">{t.region}: {t.all}</option>
