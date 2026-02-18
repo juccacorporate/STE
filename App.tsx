@@ -28,7 +28,16 @@ const App: React.FC = () => {
     if (isAuthenticated) {
       fetch(API_URL)
         .then(res => res.json())
-        .then(data => setTasks(data))
+        .then(data => {
+          // Esse trecho abaixo limpa as datas antes de salvar no site
+          const dadosLimpos = data.map(item => ({
+            ...item,
+            // Se a data for um número doido da planilha, ele tenta corrigir
+            startDate: item.startDate ? new Date(item.startDate).toISOString().split('T')[0] : '',
+            dueDate: item.dueDate ? new Date(item.dueDate).toISOString().split('T')[0] : ''
+          }));
+          setTasks(dadosLimpos);
+        })
         .catch(err => console.error("Erro ao carregar dados:", err));
     }
   }, [isAuthenticated]);
