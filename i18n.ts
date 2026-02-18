@@ -1,0 +1,103 @@
+
+export const translations = {
+  PT: {
+    kanban: "KANBAN",
+    database: "BASE DE DADOS",
+    region: "Região",
+    priority: "Prioridade",
+    owner: "Owner",
+    support: "Apoio",
+    onTime: "No Prazo?",
+    status: "Status",
+    clearFilters: "Limpar Filtros",
+    all: "Todos",
+    onTimeLabel: "Dentro do prazo",
+    delayedLabel: "Fora do prazo (atrasado)",
+    activeStatus: "Em andamento + Não iniciado",
+    newTask: "NOVA TAREFA",
+    edit: "EDITAR",
+    save: "SALVAR",
+    cancel: "CANCELAR",
+    total: "Total",
+    completed: "Concluídos",
+    environment: "Ambiente de Controle Customer Care",
+    category: "Área (Categoria)",
+    description: "Descrição Detalhada",
+    actionSteps: "Ação / Próximos Passos",
+    scenarioSummary: "Resumo do Cenário",
+    taskTimeline: "Timeline da Tarefa",
+    escalation: "Escalação (Badges)",
+    startDate: "Data Início",
+    dueDate: "Prazo (Due Date)",
+    progress: "Progresso (%)",
+    categories: {
+      PROJETOS: "PROJETOS",
+      QUALIDADE: "QUALIDADE",
+      PRODUTO: "PRODUTO",
+      FINANCEIRO: "FINANCEIRO"
+    },
+    priorities: {
+      Alta: "Alta",
+      Média: "Média",
+      Baixa: "Baixa"
+    },
+    statuses: {
+      "Concluído": "Concluído",
+      "Em andamento": "Em andamento",
+      "Não iniciado": "Não iniciado"
+    },
+    emptyCategory: "Vazio nesta categoria",
+    insightTitle: "Insight do Dono",
+    noTasks: "Nenhuma tarefa registrada no banco de dados."
+  },
+  ES: {
+    kanban: "TABLERO",
+    database: "BASE DE DATOS",
+    region: "Región",
+    priority: "Prioridad",
+    owner: "Dueño",
+    support: "Apoyo",
+    onTime: "¿A Tiempo?",
+    status: "Estado",
+    clearFilters: "Limpiar Filtros",
+    all: "Todos",
+    onTimeLabel: "A tiempo",
+    delayedLabel: "Retrasado",
+    activeStatus: "En progreso + No iniciado",
+    newTask: "NUEVA TAREA",
+    edit: "EDITAR",
+    save: "GUARDAR",
+    cancel: "CANCELAR",
+    total: "Total",
+    completed: "Completados",
+    environment: "Entorno de Control Customer Care",
+    category: "Área (Categoría)",
+    description: "Descripción Detallada",
+    actionSteps: "Acción / Próximos Pasos",
+    scenarioSummary: "Resumen del Escenario",
+    taskTimeline: "Cronología de la Tarea",
+    escalation: "Escalación (Badges)",
+    startDate: "Fecha Inicio",
+    dueDate: "Plazo (Vencimiento)",
+    progress: "Progreso (%)",
+    categories: {
+      PROJETOS: "PROYECTOS",
+      QUALIDADE: "CALIDAD",
+      PRODUTO: "PRODUCTO",
+      FINANCEIRO: "FINANCIERO"
+    },
+    priorities: {
+      Alta: "Alta",
+      Média: "Media",
+      Baixa: "Baja"
+    },
+    statuses: {
+      "Concluído": "Completado",
+      "Em andamento": "En progreso",
+      "Não iniciado": "No iniciado"
+    },
+    emptyCategory: "Vacío en esta categoría",
+    insightTitle: "Insight del Dueño",
+    noTasks: "No hay tareas registradas en la base de datos."
+  }
+};

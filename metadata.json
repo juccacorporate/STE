@@ -1,0 +1,8 @@
+{
+  "name": "Convergência Customer Care Task Manager",
+  "description": "A professional task management and meeting presentation dashboard designed for corporate environments, featuring Kanban-style category views, dynamic filtering, and a comprehensive task database.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
