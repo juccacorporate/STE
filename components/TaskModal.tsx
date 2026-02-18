@@ -8,10 +8,11 @@ interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (task: Task) => void;
+  onDelete: (id: string) => void;
   lang: Language;
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, lang }) => {
+const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, onDelete, lang }) => {
   const t = translations[lang];
   const [formData, setFormData] = useState<Partial<Task>>({
     region: Region.BRAZIL,
@@ -51,6 +52,12 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, la
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: name === 'progress' ? parseInt(value) : value }));
+  };
+
+  const handleDelete = () => {
+    if (task?.id) {
+      onDelete(task.id);
+    }
   };
 
   const inputClass = "w-full border border-gray-200 rounded-xl p-3 text-sm bg-gray-50/50 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all";
@@ -160,13 +167,26 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, la
           </div>
         </form>
 
-        <div className="p-8 border-t border-gray-50 bg-gray-50/30 flex justify-end gap-4">
-          <button type="button" onClick={onClose} className="px-8 py-3 bg-white border border-gray-200 rounded-xl text-gray-500 font-black text-xs hover:bg-gray-100 transition-all uppercase tracking-widest shadow-sm">
-            {t.cancel}
-          </button>
-          <button onClick={handleSubmit} type="submit" className="px-10 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all uppercase tracking-widest">
-            {t.save}
-          </button>
+        <div className="p-8 border-t border-gray-50 bg-gray-50/30 flex justify-between gap-4">
+          <div className="flex gap-4">
+            {task && (
+              <button 
+                type="button" 
+                onClick={handleDelete} 
+                className="px-8 py-3 bg-red-50 text-red-600 border border-red-100 rounded-xl font-black text-xs hover:bg-red-600 hover:text-white transition-all uppercase tracking-widest shadow-sm"
+              >
+                <i className="fas fa-trash-alt mr-2"></i> {t.delete}
+              </button>
+            )}
+          </div>
+          <div className="flex gap-4">
+            <button type="button" onClick={onClose} className="px-8 py-3 bg-white border border-gray-200 rounded-xl text-gray-500 font-black text-xs hover:bg-gray-100 transition-all uppercase tracking-widest shadow-sm">
+              {t.cancel}
+            </button>
+            <button onClick={handleSubmit} type="submit" className="px-10 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all uppercase tracking-widest">
+              {t.save}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,6 @@
 
 export const translations = {
   PT: {
-    loginTitle: "Acesso Restrito",
-    loginSubtitle: "Digite a senha para acessar o Customer Care Hub",
-    loginPlaceholder: "Sua senha",
-    loginButton: "ENTRAR NO SISTEMA",
-    loginError: "Senha incorreta. Tente novamente.",
     kanban: "KANBAN",
     database: "BASE DE DADOS",
     region: "Região",
@@ -21,6 +16,7 @@ export const translations = {
     activeStatus: "Em andamento + Não iniciado",
     newTask: "NOVA TAREFA",
     edit: "EDITAR",
+    delete: "EXCLUIR",
     save: "SALVAR",
     cancel: "CANCELAR",
     total: "Total",
@@ -53,14 +49,10 @@ export const translations = {
     },
     emptyCategory: "Vazio nesta categoria",
     insightTitle: "Insight do Dono",
-    noTasks: "Nenhuma tarefa registrada no banco de dados."
+    noTasks: "Nenhuma tarefa registrada no banco de dados.",
+    confirmDelete: "Tem certeza que deseja excluir esta tarefa?"
   },
   ES: {
-    loginTitle: "Acceso Restringido",
-    loginSubtitle: "Ingrese la contraseña para acceder al Customer Care Hub",
-    loginPlaceholder: "Su contraseña",
-    loginButton: "ENTRAR AL SISTEMA",
-    loginError: "Contraseña incorrecta. Inténtelo de nuevo.",
     kanban: "TABLERO",
     database: "BASE DE DATOS",
     region: "Región",
@@ -76,6 +68,7 @@ export const translations = {
     activeStatus: "En progreso + No iniciado",
     newTask: "NUEVA TAREA",
     edit: "EDITAR",
+    delete: "ELIMINAR",
     save: "GUARDAR",
     cancel: "CANCELAR",
     total: "Total",
@@ -83,7 +76,7 @@ export const translations = {
     environment: "Entorno de Control Customer Care",
     category: "Área (Categoría)",
     description: "Descripción Detallada",
-    actionSteps: "Acción / Próximos Passos",
+    actionSteps: "Acción / Próximos Pasos",
     scenarioSummary: "Resumen del Escenario",
     taskTimeline: "Cronología de la Tarea",
     escalation: "Escalación (Badges)",
@@ -108,6 +101,7 @@ export const translations = {
     },
     emptyCategory: "Vacío en esta categoría",
     insightTitle: "Insight del Dueño",
-    noTasks: "No hay tareas registradas en la base de datos."
+    noTasks: "No hay tareas registradas en la base de datos.",
+    confirmDelete: "¿Está seguro de que desea eliminar esta tarea?"
   }
 };

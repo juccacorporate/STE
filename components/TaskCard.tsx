@@ -6,6 +6,7 @@ import { translations } from '../i18n';
 interface TaskCardProps {
   task: Task;
   onEdit: (task: Task) => void;
+  onDelete: (id: string) => void;
   lang: Language;
   onHover: (task: Task | null, element?: HTMLElement) => void;
 }
@@ -36,11 +37,9 @@ const isOverdue = (dueDate: string, status: Status) => {
   return due < today;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, lang, onHover }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, lang, onHover }) => {
   const t = translations[lang];
   const overdue = isOverdue(task.dueDate, task.status);
-  
-  // Logic for the badge: use manual escalation text if present, otherwise auto-show "Atrasado" if overdue
   const displayBadge = task.escalation || (overdue ? (lang === 'PT' ? 'Atrasado' : 'Retrasado') : '');
 
   return (
