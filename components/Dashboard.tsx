@@ -1,7 +1,7 @@
 import React from 'react';
 import { Task, Language, Status } from '../types';
 import { translations } from '../i18n';
-import KanbanColumn from './KanbanColumn';
+import KanbanColumn from './KanbanColumn'; // <-- Caminho corrigido aqui
 
 interface Props {
   tasks: Task[];
@@ -16,7 +16,7 @@ const Dashboard: React.FC<Props> = ({ tasks, onEditTask, onDeleteTask, lang }) =
   // Filtra as tarefas por status para cada coluna do Kanban
   const projects = tasks.filter(task => task.category === 'PROJETOS');
   const quality = tasks.filter(task => task.category === 'QUALIDADE');
-  const product = tasks.fiter(task => task.category === 'PRODUTO');
+  const product = tasks.filter(task => task.category === 'PRODUTO');
   const finance = tasks.filter(task => task.category === 'FINANCEIRO');
 
   return (
