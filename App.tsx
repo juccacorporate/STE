@@ -19,23 +19,24 @@ const App: React.FC = () => {
 
   const t = translations[lang];
 
-  // BUSCAR DADOS (LÊ TODOS OS CAMPOS)
+  // *** CORRIGIDO: SINTAXE DO USEEFFECT CORRETA ***
   useEffect(() => {
     if (isAuthenticated) {
       fetch(API_URL)
         .then(res => res.json())
         .then(data => {
-          setTasks(data.map((item: any) => ({
+          const formatData = data.map((item: any) => ({
             ...item,
             id: String(item.id),
             progress: Number(item.progress) || 0,
-            // Mapeamento dos campos do SheetDB para o objeto Task
             description: item.description || '',
             actionSteps: item.actionSteps || '',
             scenarioSummary: item.scenarioSummary || '',
             timeline: item.timeline || ''
           }));
-        });
+          setTasks(formatData);
+        }) // <-- O PARÊNTESE QUE FALTAVA ESTÁ AQUI!
+        .catch(err => console.error("Erro ao carregar:", err)); // AQUI O CATCH AJUDA A DEBUGAR
     }
   }, [isAuthenticated]);
 
@@ -116,7 +117,7 @@ const App: React.FC = () => {
     setTasks(prev => prev.filter(task => task.id !== id));
   };
   
-  // ... (RESTO DO CÓDIGO DE VISUAL QUE ESTÁ CORRETO)
+  // ... (Resto do código de visual e login que estava correto)
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-indigo-950 px-4">
@@ -130,8 +131,16 @@ const App: React.FC = () => {
           </div>
           <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 backdrop-blur-xl shadow-2xl">
             <form onSubmit={handleLogin} className="space-y-6">
-              <input type="password" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} placeholder="Senha de Acesso" className={`w-full rounded-2xl border ${loginError ? 'border-red-500 bg-red-500/10' : 'border-white/10 bg-white/5'} p-4 text-center text-white outline-none focus:border-indigo-500`} autoFocus />
-              <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black uppercase text-white hover:bg-indigo-500 transition-all text-xs">Acessar Hub</button>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Senha de Acesso"
+                className={`w-full rounded-2xl border ${loginError ? 'border-red-500 bg-red-500/10' : 'border-white/10 bg-white/5'} p-4 text-center text-white outline-none transition-all focus:border-indigo-500`}
+                autoFocus
+              />
+              {loginError && <p className="text-center text-[10px] font-black uppercase text-red-400 animate-bounce">Senha Incorreta</p>}
+              <button type="submit" className="w-full rounded-2xl bg-indigo-600 py-4 font-black uppercase text-white hover:bg-indigo-500 text-xs transition-all">Acessar Hub</button>
             </form>
           </div>
           <p className="mt-8 text-center text-[9px] font-bold uppercase tracking-widest text-white/20">Internal Use Only • Stellantis LatAm</p>
@@ -167,6 +176,7 @@ const App: React.FC = () => {
             <button onClick={() => setIsAuthenticated(false)} className="text-red-600 font-black text-[10px] bg-red-50 px-4 py-2 rounded-xl border border-red-100">SAIR</button>
           </div>
         </div>
+        {/* Filtros (Restaurados) */}
         <div className="max-w-[1600px] mx-auto mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
             <select value={filters.region} onChange={(e) => setFilters(f => ({ ...f, region: e.target.value as any }))}>...</select>
             <select value={filters.priority} onChange={(e) => setFilters(f => ({ ...f, priority: e.target.value as any }))}>...</select>
