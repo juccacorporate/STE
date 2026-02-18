@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Task, Priority, Status, Language } from '../types';
-import { translations } from '../i18n';
+import { Task, Priority, Status, Language } from '../types.ts';
+import { translations } from '../i18n.ts';
 
 interface TaskCardProps {
   task: Task;

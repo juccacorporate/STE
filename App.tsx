@@ -1,13 +1,19 @@
 
 import React, { useState, useMemo } from 'react';
-import { Task, Region, Category, Priority, Status, FilterState, Language } from './types';
-import { INITIAL_TASKS } from './data';
-import { translations } from './i18n';
-import Dashboard from './components/Dashboard';
-import Database from './components/Database';
-import TaskModal from './components/TaskModal';
+import { Task, Region, Category, Priority, Status, FilterState, Language } from './types.ts';
+import { INITIAL_TASKS } from './data.ts';
+import { translations } from './i18n.ts';
+import Dashboard from './components/Dashboard.tsx';
+import Database from './components/Database.tsx';
+import TaskModal from './components/TaskModal.tsx';
 
 const App: React.FC = () => {
+  // --- Estados de Segurança ---
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  // --- Estados da Aplicação ---
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [activeTab, setActiveTab] = useState<'KANBAN' | 'DATABASE'>('KANBAN');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +29,18 @@ const App: React.FC = () => {
     delayed: 'Todos',
     status: 'Todos'
   });
+
+  const handleLogin = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    // Atualizado para a nova senha: Stellantis2026!
+    if (passwordInput === 'Stellantis2026!') {
+      setIsAuthenticated(true);
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 2000);
+    }
+  };
 
   const ownersList = useMemo(() => {
     const allPeople = new Set<string>();
@@ -67,7 +85,6 @@ const App: React.FC = () => {
   };
 
   const handleDeleteTask = (id: string) => {
-    // Exclusão direta sem confirmação para garantir funcionamento imediato
     setTasks(prev => prev.filter(task => task.id !== id));
     if (isModalOpen) setIsModalOpen(false);
   };
@@ -92,10 +109,64 @@ const App: React.FC = () => {
     });
   };
 
+  // --- Renderização da Tela de Login ---
+  if (!isAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-indigo-950 px-4">
+        <div className="w-full max-w-md">
+          <div className="mb-12 text-center">
+            <div className="inline-flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-600 text-white shadow-2xl shadow-indigo-500/20 mb-6">
+              <i className="fas fa-shield-halved text-3xl"></i>
+            </div>
+            <h1 className="text-3xl font-black tracking-tighter text-white">CONVERGÊNCIA</h1>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-indigo-400 opacity-60">Customer Care Secure Hub</p>
+          </div>
+
+          <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 backdrop-blur-xl shadow-2xl">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label className="mb-2 block px-2 text-[10px] font-black uppercase tracking-widest text-indigo-300">
+                  Senha de Acesso
+                </label>
+                <input
+                  type="password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="••••••••••••"
+                  className={`w-full rounded-2xl border ${loginError ? 'border-red-500 bg-red-500/10' : 'border-white/10 bg-white/5'} p-4 text-center text-white placeholder-white/20 outline-none transition-all focus:border-indigo-500 focus:bg-white/10`}
+                  autoFocus
+                />
+              </div>
+
+              {loginError && (
+                <p className="text-center text-[10px] font-black uppercase tracking-widest text-red-400 animate-bounce">
+                  Senha Incorreta
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="group relative w-full overflow-hidden rounded-2xl bg-indigo-600 py-4 font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/20 active:scale-95 text-xs"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Acessar Hub <i className="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <p className="mt-8 text-center text-[9px] font-bold uppercase tracking-widest text-white/20">
+            Internal Use Only • Stellantis LatAm
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const filterSelectClass = "text-[11px] border border-gray-200 rounded-xl p-2.5 bg-white text-gray-900 focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-sm font-bold appearance-none";
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFDFF]">
+    <div className="flex flex-col min-h-screen bg-[#FDFDFF] animate-in fade-in duration-700">
       {/* Header */}
       <header className="bg-white border-b border-gray-100 p-4 sticky top-0 z-30 shadow-sm">
         <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
@@ -142,10 +213,13 @@ const App: React.FC = () => {
 
             <div className="h-8 border-l border-gray-100 hidden md:block"></div>
             
-            <div className="flex items-center gap-2 text-indigo-900 font-black text-[10px] tracking-widest opacity-40">
-              <i className="fas fa-globe-americas text-lg"></i>
-              <span>LATAM HUB</span>
-            </div>
+            <button 
+              onClick={() => setIsAuthenticated(false)}
+              className="flex items-center gap-2 text-red-600 font-black text-[10px] tracking-widest hover:text-red-800 transition-colors bg-red-50 px-4 py-2 rounded-xl border border-red-100"
+            >
+              <i className="fas fa-sign-out-alt"></i>
+              SAIR
+            </button>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Task, Region, Category, Priority, Status, Language } from '../types';
-import { translations } from '../i18n';
+import { Task, Region, Category, Priority, Status, Language } from '../types.ts';
+import { translations } from '../i18n.ts';
 
 interface TaskModalProps {
   task: Task | null;

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Task, Category, Language } from '../types';
-import { translations } from '../i18n';
-import TaskCard from './TaskCard';
+import { Task, Category, Language } from '../types.ts';
+import { translations } from '../i18n.ts';
+import TaskCard from './TaskCard.tsx';
 
 interface DashboardProps {
   tasks: Task[];

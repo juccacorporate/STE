@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Task, Language, Region, Status } from '../types';
-import { translations } from '../i18n';
+import { Task, Language, Region, Status } from '../types.ts';
+import { translations } from '../i18n.ts';
 
 interface DatabaseProps {
   tasks: Task[];
