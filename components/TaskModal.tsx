@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Task, Language, Status, Priority, Category, Region } from '../types';
 import { translations } from '../i18n';
 
-interface Props {
-  isOpen: boolean; task: Task | null; onClose: () => void; onSave: (task: Task) => void; onDelete: (id: string) => void; lang: Language;
-}
+interface Props { isOpen: boolean; task: Task | null; onClose: () => void; onSave: (task: Task) => void; onDelete: (id: string) => void; lang: Language; }
 
 const TaskModal: React.FC<Props> = ({ isOpen, task, onClose, onSave, onDelete, lang }) => {
   const t = translations[lang];
@@ -23,25 +21,24 @@ const TaskModal: React.FC<Props> = ({ isOpen, task, onClose, onSave, onDelete, l
 
   return (
     <div className="fixed inset-0 bg-indigo-950/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 w-full max-w-5xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6 border-b pb-4">
-          <h2 className="text-2xl font-black text-gray-800 flex items-center gap-3"><i className="fas fa-edit text-indigo-600"></i> {task ? t.editTask : t.newTask}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-        </div>
+      <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 w-full max-w-5xl max-h-[90vh] overflow-y-auto text-left">
+        <h2 className="text-2xl font-black text-gray-800 mb-6 flex items-center gap-3 border-b pb-4">
+          <i className="fas fa-edit text-indigo-600"></i> {task ? t.editTask : t.newTask}
+        </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* COLUNA 1 */}
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">{t.title}</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">{t.title}</label>
               <input name="title" value={formData.title || ''} onChange={handleChange} className={inputClass} />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">Escalação (Badges)</label>
-              <input name="escalation" value={formData.escalation || ''} onChange={handleChange} className={inputClass} />
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Escalação (Badges)</label>
+              <input name="escalation" value={formData.escalation || ''} onChange={handleChange} className={inputClass} placeholder="Ex: ATRASADO, URGENTE" />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">{t.status}</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">{t.status}</label>
               <select name="status" value={formData.status} onChange={handleChange} className={inputClass}>
                 {Object.entries(t.statuses).map(([key, val]) => <option key={key} value={key}>{val}</option>)}
               </select>
@@ -51,11 +48,11 @@ const TaskModal: React.FC<Props> = ({ isOpen, task, onClose, onSave, onDelete, l
           {/* COLUNA 2 */}
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">Descrição Detalhada</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">{t.description}</label>
               <textarea name="description" value={formData.description || ''} onChange={handleChange} className={`${inputClass} h-32 resize-none`} />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">Ações / Próximos Passos</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Ações / Próximos Passos</label>
               <textarea name="actionSteps" value={formData.actionSteps || ''} onChange={handleChange} className={`${inputClass} h-32 resize-none`} />
             </div>
           </div>
@@ -63,18 +60,18 @@ const TaskModal: React.FC<Props> = ({ isOpen, task, onClose, onSave, onDelete, l
           {/* COLUNA 3 */}
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">Resumo do Cenário</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Resumo do Cenário</label>
               <textarea name="scenarioSummary" value={formData.scenarioSummary || ''} onChange={handleChange} className={`${inputClass} h-32 resize-none`} />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-1">Timeline</label>
+              <label className="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Timeline</label>
               <textarea name="timeline" value={formData.timeline || ''} onChange={handleChange} className={`${inputClass} h-32 resize-none`} />
             </div>
           </div>
         </div>
 
         <div className="flex justify-between mt-10 border-t pt-6">
-          <button onClick={() => task && onDelete(task.id)} className="text-red-500 font-black text-xs uppercase px-6 py-3 rounded-xl">Eliminar</button>
+          <button onClick={() => task && onDelete(task.id)} className="text-red-500 font-black text-xs uppercase px-6 py-3 rounded-xl hover:bg-red-50">Eliminar</button>
           <div className="flex gap-3">
             <button onClick={onClose} className="px-8 py-3 rounded-xl bg-gray-100 text-gray-500 font-black text-xs uppercase">Cancelar</button>
             <button onClick={() => onSave(formData as Task)} className="px-10 py-3 rounded-xl bg-indigo-600 text-white font-black text-xs uppercase shadow-lg">Guardar</button>
