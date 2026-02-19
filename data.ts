@@ -7,7 +7,7 @@ export const INITIAL_TASKS: Task[] = [
     region: Region.BRAZIL,
     title: 'Backup Car',
     description: 'Gestão de veículos reserva para a frota regional.',
-    action: 'Monitorar disponibilidade e custos.',
+    actionSteps: 'Monitorar disponibilidade e custos.',
     category: Category.PROJETOS,
     priority: Priority.MEDIA,
     owner: 'Monica Silva',
@@ -17,7 +17,7 @@ export const INITIAL_TASKS: Task[] = [
     progress: 80,
     dueDate: '2025-02-15',
     escalation: '',
-    notes: 'Ajustar contratos até o fim do mês.',
+    scenarioSummary: 'Ajustar contratos até o fim do mês.',
     timeline: '12/10: Início do projeto. 20/11: Primeira revisão de custos finalizada.'
   },
   {
@@ -25,7 +25,7 @@ export const INITIAL_TASKS: Task[] = [
     region: Region.BRAZIL,
     title: 'Inteligência Artificial (Atendimento)',
     description: 'Implementação de chatbots de IA no atendimento ao cliente.',
-    action: 'Validar fluxos de conversação.',
+    actionSteps: 'Validar fluxos de conversação.',
     category: Category.QUALIDADE,
     priority: Priority.ALTA,
     owner: 'Nilson Marcos',
@@ -35,7 +35,7 @@ export const INITIAL_TASKS: Task[] = [
     progress: 50,
     dueDate: '2025-06-30',
     escalation: 'Atrasado',
-    notes: 'Necessário feedback da engenharia.',
+    scenarioSummary: 'Necessário feedback da engenharia.',
     timeline: '05/01: Escopo definido. 15/03: Protótipo em testes.'
   },
   {
@@ -43,7 +43,7 @@ export const INITIAL_TASKS: Task[] = [
     region: Region.ARGENTINA,
     title: 'Carros falhando - Lote Argo',
     description: 'Investigação de falhas mecânicas no lote recente.',
-    action: 'Revisar o lote e emitir laudo.',
+    actionSteps: 'Revisar o lote e emitir laudo.',
     category: Category.PRODUTO,
     priority: Priority.ALTA,
     owner: 'Lucas João',
@@ -53,7 +53,7 @@ export const INITIAL_TASKS: Task[] = [
     progress: 10,
     dueDate: '2025-02-27',
     escalation: '',
-    notes: 'Urgent: Falha detectada em 5% da amostra.',
+    scenarioSummary: 'Urgent: Falha detectada em 5% da amostra.',
     timeline: '10/02: Abertura do chamado técnico.'
   },
   {
@@ -61,7 +61,7 @@ export const INITIAL_TASKS: Task[] = [
     region: Region.CHILE,
     title: 'Processo PAF (Recuperação)',
     description: 'Recuperação de impostos e créditos fiscais no Chile.',
-    action: 'Audit fiscal completo.',
+    actionSteps: 'Audit fiscal completo.',
     category: Category.FINANCEIRO,
     priority: Priority.MEDIA,
     owner: 'Tatiana Diniz',
@@ -71,7 +71,7 @@ export const INITIAL_TASKS: Task[] = [
     progress: 100,
     dueDate: '2024-12-31',
     escalation: '',
-    notes: 'Concluído com economia de 15%.',
+    scenarioSummary: 'Concluído com economia de 15%.',
     timeline: '15/05/23: Início da auditoria. 20/12/24: Finalização e entrega do relatório.'
   },
   {
@@ -79,7 +79,7 @@ export const INITIAL_TASKS: Task[] = [
     region: Region.SOUTH_AMERICA,
     title: 'Governança Customer Care',
     description: 'Unificação dos processos de atendimento na LatAm.',
-    action: 'Workshops regionais.',
+    actionSteps: 'Workshops regionais.',
     category: Category.PROJETOS,
     priority: Priority.BAIXA,
     owner: 'Adriana Cosso',
@@ -89,7 +89,7 @@ export const INITIAL_TASKS: Task[] = [
     progress: 0,
     dueDate: '2025-12-31',
     escalation: '',
-    notes: 'Aguardando aprovação orçamentária.',
+    scenarioSummary: 'Aguardando aprovação orçamentária.',
     timeline: '01/01: Planejamento inicial.'
   }
 ];

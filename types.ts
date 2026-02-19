@@ -32,7 +32,7 @@ export interface Task {
   region: Region;
   title: string;
   description: string;
-  action: string;
+  actionSteps: string;
   category: Category;
   priority: Priority;
   owner: string;
@@ -42,7 +42,7 @@ export interface Task {
   progress: number;
   dueDate: string;
   escalation: string;
-  notes: string;
+  scenarioSummary: string;
   timeline: string;
 }
 

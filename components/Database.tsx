@@ -93,7 +93,7 @@ const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, on
                     )}
                   </div>
                 </td>
-                <td className="p-4 text-gray-700 italic max-w-xs truncate">{task.action}</td>
+                <td className="p-4 text-gray-700 italic max-w-xs truncate">{task.actionSteps}</td>
                 <td className="p-4 font-bold text-indigo-500/80 uppercase">{t.categories[task.category as keyof typeof t.categories]}</td>
                 <td className="p-4 text-center">
                   <span className={`px-2 py-1 rounded-full font-black text-[9px] uppercase tracking-tighter
