@@ -66,7 +66,7 @@ const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, on
         <tbody>
           {tasks.map((task) => {
             const overdue = isOverdue(task.dueDate, task.status);
-            const displayBadge = task.escalation || (overdue ? (lang === 'PT' ? 'Atrasado' : 'Retrasado') : '');
+            const overdueLabel = lang === 'PT' ? 'Atrasado' : 'Retraso';
             
             return (
               <tr 
@@ -86,11 +86,13 @@ const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, on
                 <td className="p-4 font-black text-gray-900">
                   <div className="flex flex-col gap-1">
                     {task.title}
-                    {displayBadge && (
-                      <span className="inline-block w-fit bg-red-600 text-white text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider shadow-sm animate-pulse">
-                        {displayBadge}
-                      </span>
-                    )}
+                    <div className="flex flex-wrap gap-1">
+                      {overdue && (
+                        <span className="inline-block w-fit bg-red-600 text-white text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider shadow-sm animate-pulse">
+                          {overdueLabel}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td className="p-4 text-gray-700 italic max-w-xs truncate">{task.actionSteps}</td>

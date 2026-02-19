@@ -19,7 +19,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, on
     category: Category.PROJETOS,
     priority: Priority.MEDIA,
     status: Status.NAO_INICIADO,
-    progress: 0,
+    progress: undefined,
     startDate: new Date().toISOString().split('T')[0],
     dueDate: new Date().toISOString().split('T')[0],
     timeline: '',
@@ -40,7 +40,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, on
         category: Category.PROJETOS,
         priority: Priority.MEDIA,
         status: Status.NAO_INICIADO,
-        progress: 0,
+        progress: undefined,
         startDate: new Date().toISOString().split('T')[0],
         dueDate: new Date().toISOString().split('T')[0],
         timeline: '',
@@ -127,7 +127,15 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, isOpen, onClose, onSave, on
 
             <div>
               <label className={labelClass}>{t.progress}</label>
-              <input type="number" name="progress" min="0" max="100" value={formData.progress} onChange={handleChange} className={inputClass} />
+              <input 
+                type="number" 
+                name="progress" 
+                min="0" 
+                max="100" 
+                value={formData.progress ?? ''} 
+                onChange={handleChange} 
+                className={inputClass} 
+              />
             </div>
 
             <div>

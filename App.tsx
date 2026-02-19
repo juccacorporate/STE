@@ -117,12 +117,17 @@ const App: React.FC = () => {
 
   const handleSaveTask = async (taskData: Task) => {
     try {
+      const finalTaskData = {
+        ...taskData,
+        progress: taskData.progress || 0
+      };
+
       if (editingTask) {
-        await api.updateTask(editingTask.id, taskData);
-        setTasks(prev => prev.map(t => t.id === editingTask.id ? taskData : t));
+        await api.updateTask(editingTask.id, finalTaskData);
+        setTasks(prev => prev.map(t => t.id === editingTask.id ? finalTaskData : t));
       } else {
         const id = Math.random().toString(36).substr(2, 9);
-        const newTask = { ...taskData, id };
+        const newTask = { ...finalTaskData, id };
         await api.createTask(newTask);
         setTasks(prev => [...prev, newTask]);
       }

@@ -1,7 +1,7 @@
 
 import { Task } from '../types';
 
-const API_URL = 'https://sheetdb.io/api/v1/87hsv43fnej';
+const API_URL = 'https://sheetdb.io/api/v1/qfvxr8lu43heq';
 
 export const api = {
   // Buscar todas as tarefas

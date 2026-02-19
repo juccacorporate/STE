@@ -40,7 +40,7 @@ const isOverdue = (dueDate: string, status: Status) => {
 const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, lang, onHover }) => {
   const t = translations[lang];
   const overdue = isOverdue(task.dueDate, task.status);
-  const displayBadge = task.escalation || (overdue ? (lang === 'PT' ? 'Atrasado' : 'Retrasado') : '');
+  const overdueLabel = lang === 'PT' ? 'Atrasado' : 'Retraso';
 
   return (
     <div 
@@ -49,11 +49,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, lang, onHov
       onMouseLeave={() => onHover(null)}
       onClick={() => onEdit(task)}
     >
-      {displayBadge && (
-        <div className="absolute -top-2 -right-1 bg-red-600 text-white text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider shadow-lg animate-pulse z-10 border border-white/20">
-          {displayBadge}
-        </div>
-      )}
+      <div className="absolute -top-2 -right-1 flex flex-col items-end gap-1 z-10">
+        {overdue && (
+          <div className="bg-red-600 text-white text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider shadow-lg animate-pulse border border-white/20">
+            {overdueLabel}
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-start">

@@ -64,7 +64,7 @@ export const translations = {
     clearFilters: "Limpiar Filtros",
     all: "Todos",
     onTimeLabel: "A tiempo",
-    delayedLabel: "Retrasado",
+    delayedLabel: "Retraso",
     activeStatus: "En progreso + No iniciado",
     newTask: "NUEVA TAREA",
     edit: "EDITAR",
