@@ -42,8 +42,9 @@ const App: React.FC = () => {
     try {
       const data = await api.getTasks();
       setTasks(data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error('Erro ao carregar tarefas:', error);
+      alert(`Erro ao carregar tarefas: ${error.message || 'Erro desconhecido'}`);
     } finally {
       setIsLoading(false);
     }
@@ -108,9 +109,9 @@ const App: React.FC = () => {
       await api.deleteTask(id);
       setTasks(prev => prev.filter(task => task.id !== id));
       if (isModalOpen) setIsModalOpen(false);
-    } catch (error) {
-      console.error(error);
-      alert('Erro ao excluir tarefa');
+    } catch (error: any) {
+      console.error('Erro ao excluir tarefa:', error);
+      alert(`Erro ao excluir tarefa: ${error.message || 'Erro desconhecido'}`);
     }
   };
 
@@ -126,9 +127,9 @@ const App: React.FC = () => {
         setTasks(prev => [...prev, newTask]);
       }
       setIsModalOpen(false);
-    } catch (error) {
-      console.error(error);
-      alert('Erro ao salvar tarefa');
+    } catch (error: any) {
+      console.error('Erro ao salvar tarefa:', error);
+      alert(`Erro ao salvar tarefa: ${error.message || 'Erro desconhecido'}`);
     }
   };
 
