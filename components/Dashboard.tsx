@@ -8,10 +8,11 @@ interface DashboardProps {
   tasks: Task[];
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
+  onCompleteTask: (task: Task) => void;
   lang: Language;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, onDeleteTask, lang }) => {
+const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, onDeleteTask, onCompleteTask, lang }) => {
   const [hoveredTask, setHoveredTask] = useState<{ task: Task; rect: DOMRect } | null>(null);
   const categories = [Category.PROJETOS, Category.QUALIDADE, Category.PRODUTO, Category.FINANCEIRO];
   const t = translations[lang];
@@ -58,6 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ tasks, onEditTask, onDeleteTask, 
                   task={task} 
                   onEdit={onEditTask} 
                   onDelete={onDeleteTask}
+                  onComplete={onCompleteTask}
                   lang={lang} 
                   onHover={handleTaskHover}
                 />

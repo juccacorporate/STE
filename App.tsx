@@ -28,7 +28,7 @@ const App: React.FC = () => {
     priority: 'Todos',
     owner: 'Todos',
     delayed: 'Todos',
-    status: 'Todos'
+    status: 'Ativos'
   });
 
   useEffect(() => {
@@ -138,13 +138,24 @@ const App: React.FC = () => {
     }
   };
 
+  const handleCompleteTask = async (task: Task) => {
+    try {
+      const updatedTask = { ...task, status: Status.CONCLUIDO, progress: 100 };
+      await api.updateTask(task.id, updatedTask);
+      setTasks(prev => prev.map(t => t.id === task.id ? updatedTask : t));
+    } catch (error: any) {
+      console.error('Erro ao concluir tarefa:', error);
+      alert(`Erro ao concluir tarefa: ${error.message || 'Erro desconhecido'}`);
+    }
+  };
+
   const resetFilters = () => {
     setFilters({
       region: 'Todos',
       priority: 'Todos',
       owner: 'Todos',
       delayed: 'Todos',
-      status: 'Todos'
+      status: 'Ativos'
     });
   };
 
@@ -347,12 +358,19 @@ const App: React.FC = () => {
             <p className="text-xs font-black text-indigo-900 uppercase tracking-widest animate-pulse">Sincronizando com Google Sheets...</p>
           </div>
         ) : activeTab === 'KANBAN' ? (
-          <Dashboard tasks={filteredTasks} onEditTask={handleEditTask} onDeleteTask={handleDeleteTask} lang={lang} />
+          <Dashboard 
+            tasks={filteredTasks} 
+            onEditTask={handleEditTask} 
+            onDeleteTask={handleDeleteTask} 
+            onCompleteTask={handleCompleteTask}
+            lang={lang} 
+          />
         ) : (
           <Database 
             tasks={filteredTasks} 
             onEditTask={handleEditTask} 
             onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
             onAddTask={handleAddTask} 
             lang={lang}
           />

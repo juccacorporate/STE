@@ -7,6 +7,7 @@ interface TaskCardProps {
   task: Task;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
+  onComplete: (task: Task) => void;
   lang: Language;
   onHover: (task: Task | null, element?: HTMLElement) => void;
 }
@@ -37,7 +38,7 @@ const isOverdue = (dueDate: string, status: Status) => {
   return due < today;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, lang, onHover }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onComplete, lang, onHover }) => {
   const t = translations[lang];
   const overdue = isOverdue(task.dueDate, task.status);
   const overdueLabel = lang === 'PT' ? 'Atrasado' : 'Retraso';
@@ -59,9 +60,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, lang, onHov
 
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-start">
-          <h4 className="font-bold text-[12px] text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">
+          <h4 className="font-bold text-[12px] text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors pr-6">
             {task.title}
           </h4>
+          {task.status !== Status.CONCLUIDO && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onComplete(task); }}
+              className="text-gray-300 hover:text-emerald-500 transition-colors p-1 rounded-full hover:bg-emerald-50 absolute right-2 top-2 opacity-0 group-hover:opacity-100"
+              title={lang === 'PT' ? 'Concluir tarefa' : 'Completar tarea'}
+            >
+              <i className="fas fa-check-circle text-lg"></i>
+            </button>
+          )}
         </div>
         
         <div className="flex flex-col gap-1">

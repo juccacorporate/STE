@@ -7,11 +7,12 @@ interface DatabaseProps {
   tasks: Task[];
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
+  onCompleteTask: (task: Task) => void;
   onAddTask: () => void;
   lang: Language;
 }
 
-const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, onAddTask, lang }) => {
+const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, onCompleteTask, onAddTask, lang }) => {
   const t = translations[lang];
 
   const getRegionRowColor = (region: Region) => {
@@ -125,6 +126,15 @@ const Database: React.FC<DatabaseProps> = ({ tasks, onEditTask, onDeleteTask, on
                 </td>
                 <td className="p-4 text-right">
                   <div className="flex gap-2 justify-end">
+                    {task.status !== Status.CONCLUIDO && (
+                      <button 
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCompleteTask(task); }}
+                        className="text-emerald-600 hover:text-emerald-900 font-black uppercase tracking-widest text-[9px] bg-white border border-gray-200 hover:border-emerald-400 px-3 py-2 rounded-lg transition-all shadow-sm flex items-center gap-1.5"
+                        title={lang === 'PT' ? 'Concluir' : 'Completar'}
+                      >
+                        <i className="fas fa-check"></i>
+                      </button>
+                    )}
                     <button 
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEditTask(task); }}
                       className="text-indigo-600 hover:text-indigo-900 font-black uppercase tracking-widest text-[9px] bg-white border border-gray-200 hover:border-indigo-400 px-3 py-2 rounded-lg transition-all shadow-sm flex items-center gap-1.5"
